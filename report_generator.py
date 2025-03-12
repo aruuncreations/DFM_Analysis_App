@@ -39,23 +39,44 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
         raise ValueError(error_msg)
     
     try:
-        # Create a new BytesIO object for each attempt to ensure position is at start
-        file_stream = io.BytesIO(file_content)
-        logger.info(f"Loading mesh with file type: {file_type}")
-        try:
-            # First try with explicit file_type
-            mesh = trimesh.load(file_stream, file_type=file_type)
-        except Exception as e:
-            logger.warning(f"Failed to load with explicit file_type: {str(e)}")
-            # Create a new BytesIO to ensure we start from the beginning
-            file_stream = io.BytesIO(file_content)
+        # For STL files, use direct binary STL parsing
+        if file_type == 'stl':
             try:
-                logger.info("Attempting to load without explicit file_type")
-                mesh = trimesh.load(file_stream)
-            except Exception as e2:
-                error_msg = f"Failed to load 3D model: {str(e2)}"
-                logger.error(error_msg)
-                raise ValueError(error_msg)
+                logger.info("Attempting to load STL file directly")
+                # Use trimesh's specific STL loader which is more robust
+                from trimesh.exchange.stl import load_stl
+                file_stream = io.BytesIO(file_content)
+                mesh = load_stl(file_stream)
+                logger.info("Successfully loaded STL file directly")
+            except Exception as stl_error:
+                logger.error(f"Failed to load STL with direct method: {str(stl_error)}")
+                # Fall through to general approach
+                raise
+        
+        # For STEP files or if STL direct loading failed
+        if file_type == 'step' or 'stl' in locals():
+            # Try a more direct approach: write to a temporary file first
+            import tempfile
+            import os
+            
+            # Create a temp file with the correct extension
+            temp_fd, temp_path = tempfile.mkstemp(suffix=f".{file_extension}")
+            try:
+                logger.info(f"Writing file content to temporary file: {temp_path}")
+                with os.fdopen(temp_fd, 'wb') as temp_file:
+                    temp_file.write(file_content)
+                
+                # Load from the temporary file with correct file_type
+                logger.info(f"Loading mesh from temporary file with type: {file_type}")
+                mesh = trimesh.load(temp_path, file_type=file_type)
+                logger.info("Successfully loaded mesh from temporary file")
+            finally:
+                # Always clean up the temp file
+                try:
+                    os.unlink(temp_path)
+                    logger.info(f"Deleted temporary file: {temp_path}")
+                except Exception as cleanup_error:
+                    logger.warning(f"Failed to delete temporary file: {str(cleanup_error)}")
     except Exception as e:
         error_msg = f"Error loading file: {str(e)}"
         logger.error(error_msg)
@@ -68,7 +89,7 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
         raise ValueError(error_msg)
     
     logger.info(f"Mesh loaded successfully. Vertices: {len(mesh.vertices)}, Faces: {len(mesh.faces)}")
-
+    
     # Get vertices and faces
     vertices = mesh.vertices
     faces = mesh.faces
@@ -104,7 +125,6 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
                f"Non-compliant faces: {len(non_compliant_faces)}")
     
     return mesh, compliant_faces, non_compliant_faces
-
 def generate_3d_plot(mesh, compliant_faces, non_compliant_faces, pull_direction, draft_angle):
     """
     Generate a 3D plot of the mesh showing compliant and non-compliant faces
