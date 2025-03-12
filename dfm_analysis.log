@@ -87,3 +87,47 @@
 2025-03-12 11:35:59,383 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:59] "GET /download/pdf_base_part.stl HTTP/1.1" 200 -
 2025-03-12 11:36:02,595 - INFO - Downloading file: 3D_Visualization_base_part.stl.html, Size: 3681096 bytes
 2025-03-12 11:36:02,599 - INFO - 192.168.62.204 - - [12/Mar/2025 11:36:02] "GET /download/html_base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:57:16,549 - INFO -  * Restarting with stat
+2025-03-12 11:57:18,698 - WARNING -  * Debugger is active!
+2025-03-12 11:57:18,705 - INFO -  * Debugger PIN: 107-801-925
+2025-03-12 11:57:18,910 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-03-12 11:57:18,911 - INFO -  * Running on http://192.168.62.204:10000/ (Press CTRL+C to quit)
+2025-03-12 11:57:33,142 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:33] "GET / HTTP/1.1" 200 -
+2025-03-12 11:57:33,609 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:33] "GET / HTTP/1.1" 200 -
+2025-03-12 11:57:40,887 - INFO - Processing form submission
+2025-03-12 11:57:40,892 - INFO - Received file: base_part.stl, Material: PP, Density: 1, Draft Angle: 2.0, Pull Direction: Y
+2025-03-12 11:57:40,892 - DEBUG - File size: 59084 bytes, type: <class 'bytes'>
+2025-03-12 11:57:40,898 - INFO - Starting background task task_base_part.stl_-8436919287080499918 for file: base_part.stl
+2025-03-12 11:57:40,898 - INFO - Started background task task_base_part.stl_-8436919287080499918
+2025-03-12 11:57:40,898 - INFO - Generating reports for base_part.stl
+2025-03-12 11:57:40,899 - INFO - Parsing file: base_part.stl
+2025-03-12 11:57:40,899 - INFO - Loading mesh with file type: stl
+2025-03-12 11:57:40,915 - DEBUG - face_normals didn't match triangles, ignoring!
+2025-03-12 11:57:40,925 - DEBUG - loaded <trimesh.Trimesh(vertices.shape=(590, 3), faces.shape=(1180, 3))> using load_stl
+2025-03-12 11:57:40,926 - DEBUG - load_mesh executed in 0.0264 seconds.
+2025-03-12 11:57:40,927 - INFO - Mesh loaded successfully. Vertices: 590, Faces: 1180
+2025-03-12 11:57:40,927 - INFO - Analyzing faces for draft angle compliance. Draft angle: 2.0°
+2025-03-12 11:57:40,929 - DEBUG - generating face normals
+2025-03-12 11:57:40,964 - INFO - Analysis complete. Compliant faces: 854, Non-compliant faces: 326
+2025-03-12 11:57:40,967 - INFO - Analysis metrics - Volume: 17637.72mm³, Mass: 17.64g, Compliance: 72.37%
+2025-03-12 11:57:40,967 - INFO - Generating 3D plot
+2025-03-12 11:57:40,968 - INFO - Total face count: 1180
+2025-03-12 11:57:41,043 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:41] "POST / HTTP/1.1" 200 -
+2025-03-12 11:57:41,095 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:41] "GET /check_status/task_base_part.stl_-8436919287080499918 HTTP/1.1" 200 -
+2025-03-12 11:57:41,381 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:41] "GET / HTTP/1.1" 200 -
+2025-03-12 11:57:42,879 - INFO - Adding compliant faces to plot
+2025-03-12 11:57:42,917 - INFO - Adding non-compliant faces to plot
+2025-03-12 11:57:42,920 - INFO - Adding pull direction indicator: Y
+2025-03-12 11:57:43,190 - INFO - 3D plot generation complete
+2025-03-12 11:57:43,191 - INFO - Creating PDF report
+2025-03-12 11:57:43,201 - INFO - PDF report creation complete
+2025-03-12 11:57:43,909 - INFO - Report generation complete
+2025-03-12 11:57:43,910 - INFO - Task task_base_part.stl_-8436919287080499918 completed successfully. PDF size: 2393 bytes, HTML size: 3681096 bytes
+2025-03-12 11:57:44,107 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:44] "GET /check_status/task_base_part.stl_-8436919287080499918 HTTP/1.1" 200 -
+2025-03-12 11:57:44,147 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:44] "GET /results/task_base_part.stl_-8436919287080499918/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:57:44,338 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:44] "GET /results/task_base_part.stl_-8436919287080499918/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:57:45,480 - INFO - Downloading file: DFM_Analysis_base_part.stl.pdf, Size: 2393 bytes
+2025-03-12 11:57:45,482 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:45] "GET /download/pdf_base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:57:48,218 - INFO - Downloading file: 3D_Visualization_base_part.stl.html, Size: 3681096 bytes
+2025-03-12 11:57:48,224 - INFO - 192.168.62.204 - - [12/Mar/2025 11:57:48] "GET /download/html_base_part.stl HTTP/1.1" 200 -

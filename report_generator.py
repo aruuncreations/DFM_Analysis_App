@@ -39,23 +39,34 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
         raise ValueError(error_msg)
     
     try:
-        # For STL files, use direct binary STL parsing
+        # For STL files, try direct binary STL parsing first
+        mesh = None
         if file_type == 'stl':
             try:
                 logger.info("Attempting to load STL file directly")
                 # Use trimesh's specific STL loader which is more robust
                 from trimesh.exchange.stl import load_stl
                 file_stream = io.BytesIO(file_content)
-                mesh = load_stl(file_stream)
-                logger.info("Successfully loaded STL file directly")
+                mesh_data = load_stl(file_stream)
+                # Convert the returned data to a Trimesh object
+                if isinstance(mesh_data, dict) and 'vertices' in mesh_data and 'faces' in mesh_data:
+                    mesh = trimesh.Trimesh(**mesh_data)
+                    logger.info("Successfully loaded STL directly as Trimesh object")
+                else:
+                    # If load_stl returned something else, try to convert it
+                    try:
+                        mesh = trimesh.Trimesh(vertices=mesh_data.vertices, faces=mesh_data.faces)
+                        logger.info("Successfully converted STL data to Trimesh object")
+                    except:
+                        logger.warning("Could not convert STL data to Trimesh, falling back to file-based loading")
+                        mesh = None
             except Exception as stl_error:
-                logger.error(f"Failed to load STL with direct method: {str(stl_error)}")
-                # Fall through to general approach
-                raise
+                logger.warning(f"Failed to load STL with direct method: {str(stl_error)}")
+                mesh = None
         
-        # For STEP files or if STL direct loading failed
-        if file_type == 'step' or 'stl' in locals():
-            # Try a more direct approach: write to a temporary file first
+        # If direct method failed or for STEP files, use file-based approach
+        if mesh is None:
+            # Try with a temporary file (works better for some file formats)
             import tempfile
             import os
             
@@ -66,10 +77,57 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
                 with os.fdopen(temp_fd, 'wb') as temp_file:
                     temp_file.write(file_content)
                 
-                # Load from the temporary file with correct file_type
-                logger.info(f"Loading mesh from temporary file with type: {file_type}")
-                mesh = trimesh.load(temp_path, file_type=file_type)
-                logger.info("Successfully loaded mesh from temporary file")
+                # Set explicit permissions to ensure readability
+                try:
+                    os.chmod(temp_path, 0o644)
+                except Exception as perm_error:
+                    logger.warning(f"Failed to set file permissions: {str(perm_error)}")
+                
+                # Log file size for debugging
+                file_size = os.path.getsize(temp_path)
+                logger.debug(f"Temporary file size: {file_size} bytes")
+                
+                if file_size == 0:
+                    raise ValueError("Temporary file is empty - file content may be corrupted")
+                
+                # Add retry logic for more resilience
+                max_retries = 3
+                for attempt in range(max_retries):
+                    try:
+                        logger.info(f"Loading mesh attempt {attempt+1}/{max_retries} from {temp_path} with type: {file_type}")
+                        
+                        # For STL files, try the specific loader first, then fall back to generic
+                        if file_type == 'stl':
+                            try:
+                                # Use the STL-specific importer first
+                                from trimesh.exchange.stl import load_stl
+                                with open(temp_path, 'rb') as f:
+                                    mesh_data = load_stl(f)
+                                    if isinstance(mesh_data, dict):
+                                        mesh = trimesh.Trimesh(**mesh_data)
+                                    else:
+                                        mesh = trimesh.Trimesh(vertices=mesh_data.vertices, faces=mesh_data.faces)
+                                logger.info("Successfully loaded STL with specific loader")
+                            except Exception as specific_error:
+                                logger.warning(f"STL-specific loader failed: {str(specific_error)}, trying generic loader")
+                                # Fall back to generic loader
+                                mesh = trimesh.load(temp_path, file_type=file_type)
+                        else:
+                            # For STEP files, use the generic loader
+                            mesh = trimesh.load(temp_path, file_type=file_type)
+                        
+                        # If we got this far, we were successful
+                        break
+                    except Exception as load_error:
+                        logger.warning(f"Attempt {attempt+1} failed: {str(load_error)}")
+                        if attempt == max_retries - 1:
+                            # This was our last attempt, re-raise the error
+                            raise
+                        # Otherwise, wait a moment before trying again
+                        import time
+                        time.sleep(0.5)
+                
+                logger.info(f"Successfully loaded mesh from file")
             finally:
                 # Always clean up the temp file
                 try:
@@ -79,12 +137,23 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
                     logger.warning(f"Failed to delete temporary file: {str(cleanup_error)}")
     except Exception as e:
         error_msg = f"Error loading file: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        raise ValueError(error_msg)
+    
+    # Validate the mesh
+    if mesh is None:
+        error_msg = "Failed to load mesh with any method"
         logger.error(error_msg)
         raise ValueError(error_msg)
     
     # Check if mesh is loaded correctly
     if not hasattr(mesh, 'vertices') or not hasattr(mesh, 'faces'):
         error_msg = "The loaded file doesn't contain a valid mesh with vertices and faces"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
+    
+    if len(mesh.vertices) == 0 or len(mesh.faces) == 0:
+        error_msg = "The loaded mesh has empty vertices or faces arrays"
         logger.error(error_msg)
         raise ValueError(error_msg)
     
@@ -125,6 +194,7 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
                f"Non-compliant faces: {len(non_compliant_faces)}")
     
     return mesh, compliant_faces, non_compliant_faces
+
 def generate_3d_plot(mesh, compliant_faces, non_compliant_faces, pull_direction, draft_angle):
     """
     Generate a 3D plot of the mesh showing compliant and non-compliant faces
@@ -495,42 +565,4 @@ def generate_reports_in_memory(file_content, filename, material, density, draft_
             'pdf_content': pdf_content
         }
 
-# In report_generator.py - DELETE this entire function as it's duplicated from app.py
-# and references undefined variables MEMORY_STORAGE and RUNNING_TASKS
-def process_file_task(file_content, filename, material, density, draft_angle, pull_direction, task_id):
-    """Background task to process files with enhanced error handling"""
-    try:
-        logger.info(f"Starting background task {task_id} for file: {filename}")
-        
-        # Generate reports in memory
-        reports = generate_reports_in_memory(file_content, filename, material, density, draft_angle, pull_direction)
-        
-        # Store generated reports in memory if task wasn't cancelled
-        if task_id in RUNNING_TASKS:
-            MEMORY_STORAGE[f'pdf_{filename}'] = reports['pdf_content']
-            MEMORY_STORAGE[f'html_{filename}'] = reports['html_content']
-            MEMORY_STORAGE[f'task_status_{task_id}'] = 'completed'
-            logger.info(f"Task {task_id} completed successfully")
-        else:
-            logger.info(f"Task {task_id} was cancelled, not storing results")
-            
-    except Exception as e:
-        logger.error(f"Error in background task {task_id}: {str(e)}", exc_info=True)
-        if task_id in RUNNING_TASKS:
-            # Create a more user-friendly error message
-            error_msg = str(e)
-            if "processing.html" in error_msg.lower():
-                # Specific error for missing template
-                user_friendly_msg = "Missing template file. Please check your application installation."
-            elif "timeout" in error_msg.lower():
-                user_friendly_msg = "Processing timed out. Your model may be too complex."
-            elif "memory" in error_msg.lower():
-                user_friendly_msg = "Not enough memory to process this model. Try a simpler model."
-            else:
-                user_friendly_msg = f"Processing error: {error_msg}"
-                
-            MEMORY_STORAGE[f'task_status_{task_id}'] = f'error: {user_friendly_msg}'
-    finally:
-        # Clean up task tracking
-        if task_id in RUNNING_TASKS:
-            RUNNING_TASKS.pop(task_id)
+
