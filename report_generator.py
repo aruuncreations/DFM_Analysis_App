@@ -475,6 +475,8 @@ def generate_reports_in_memory(file_content, filename, material, density, draft_
             'pdf_content': pdf_content
         }
 
+# In report_generator.py - DELETE this entire function as it's duplicated from app.py
+# and references undefined variables MEMORY_STORAGE and RUNNING_TASKS
 def process_file_task(file_content, filename, material, density, draft_angle, pull_direction, task_id):
     """Background task to process files with enhanced error handling"""
     try:

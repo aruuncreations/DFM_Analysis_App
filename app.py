@@ -35,11 +35,18 @@ def process_file_task(file_content, filename, material, density, draft_angle, pu
         
         reports = generate_reports_in_memory(file_content, filename, material, density, draft_angle, pull_direction)
         
+        # Verify the reports have content
+        if not reports['pdf_content'] or len(reports['pdf_content']) == 0:
+            raise ValueError("Generated PDF report is empty")
+            
+        if not reports['html_content'] or len(reports['html_content']) == 0:
+            raise ValueError("Generated HTML report is empty")
+        
         if task_id in RUNNING_TASKS:
             MEMORY_STORAGE[f'pdf_{filename}'] = reports['pdf_content']
             MEMORY_STORAGE[f'html_{filename}'] = reports['html_content']
             MEMORY_STORAGE[f'task_status_{task_id}'] = 'completed'
-            logger.info(f"Task {task_id} completed successfully")
+            logger.info(f"Task {task_id} completed successfully. PDF size: {len(reports['pdf_content'])} bytes, HTML size: {len(reports['html_content'])} bytes")
     except MemoryError:
         logger.error(f"MemoryError in task {task_id}")
         MEMORY_STORAGE[f'task_status_{task_id}'] = 'error: Memory limit exceeded'
@@ -165,7 +172,7 @@ def download(file_id):
             mimetype = 'application/step' if ext in {'stp', 'step'} else 'model/stl'
             download_name = filename
 
-        logger.info(f"Downloading file: {download_name}")
+        logger.info(f"Downloading file: {download_name}, Size: {len(file_content)} bytes")
         return send_file(io.BytesIO(file_content), mimetype=mimetype, as_attachment=True, download_name=download_name)
 
     except Exception as e:

@@ -1,0 +1,89 @@
+2025-03-12 11:24:33,897 - INFO -  * Restarting with stat
+2025-03-12 11:24:35,374 - WARNING -  * Debugger is active!
+2025-03-12 11:24:35,394 - INFO -  * Debugger PIN: 107-801-925
+2025-03-12 11:24:35,564 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-03-12 11:24:35,564 - INFO -  * Running on http://192.168.62.204:10000/ (Press CTRL+C to quit)
+2025-03-12 11:25:27,778 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:27] "GET / HTTP/1.1" 200 -
+2025-03-12 11:25:29,054 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:29] "GET / HTTP/1.1" 200 -
+2025-03-12 11:25:29,070 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-12 11:25:37,160 - INFO - Processing form submission
+2025-03-12 11:25:37,167 - INFO - Received file: base_part.stl, Material: ABS, Density: 1.02, Draft Angle: 2.0, Pull Direction: Y
+2025-03-12 11:25:37,168 - DEBUG - File size: 59084 bytes
+2025-03-12 11:25:37,172 - INFO - Starting background task task_base_part.stl_7721978047321614304 for file: base_part.stl
+2025-03-12 11:25:37,172 - INFO - Started background task task_base_part.stl_7721978047321614304
+2025-03-12 11:25:37,173 - INFO - Generating reports for base_part.stl
+2025-03-12 11:25:37,174 - INFO - Parsing file: base_part.stl
+2025-03-12 11:25:37,174 - INFO - Loading mesh with file type: stl
+2025-03-12 11:25:37,191 - DEBUG - face_normals didn't match triangles, ignoring!
+2025-03-12 11:25:37,201 - DEBUG - loaded <trimesh.Trimesh(vertices.shape=(590, 3), faces.shape=(1180, 3))> using load_stl
+2025-03-12 11:25:37,202 - DEBUG - load_mesh executed in 0.0277 seconds.
+2025-03-12 11:25:37,202 - INFO - Mesh loaded successfully. Vertices: 590, Faces: 1180
+2025-03-12 11:25:37,202 - INFO - Analyzing faces for draft angle compliance. Draft angle: 2.0°
+2025-03-12 11:25:37,204 - DEBUG - generating face normals
+2025-03-12 11:25:37,274 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:37] "POST / HTTP/1.1" 200 -
+2025-03-12 11:25:37,294 - INFO - Analysis complete. Compliant faces: 854, Non-compliant faces: 326
+2025-03-12 11:25:37,299 - INFO - Analysis metrics - Volume: 17637.72mm³, Mass: 17.99g, Compliance: 72.37%
+2025-03-12 11:25:37,300 - INFO - Generating 3D plot
+2025-03-12 11:25:37,300 - INFO - Total face count: 1180
+2025-03-12 11:25:37,358 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:37] "GET /check_status/task_base_part.stl_7721978047321614304 HTTP/1.1" 200 -
+2025-03-12 11:25:37,586 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:37] "GET / HTTP/1.1" 200 -
+2025-03-12 11:25:39,272 - INFO - Adding compliant faces to plot
+2025-03-12 11:25:39,320 - INFO - Adding non-compliant faces to plot
+2025-03-12 11:25:39,323 - INFO - Adding pull direction indicator: Y
+2025-03-12 11:25:39,561 - INFO - 3D plot generation complete
+2025-03-12 11:25:39,561 - INFO - Creating PDF report
+2025-03-12 11:25:39,574 - INFO - PDF report creation complete
+2025-03-12 11:25:40,255 - INFO - Report generation complete
+2025-03-12 11:25:40,256 - INFO - Task task_base_part.stl_7721978047321614304 completed successfully
+2025-03-12 11:25:40,360 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:40] "GET /check_status/task_base_part.stl_7721978047321614304 HTTP/1.1" 200 -
+2025-03-12 11:25:40,421 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:40] "GET /results/task_base_part.stl_7721978047321614304/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:25:40,586 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:40] "GET /results/task_base_part.stl_7721978047321614304/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:25:42,309 - INFO - Downloading file: DFM_Analysis_base_part.stl.pdf
+2025-03-12 11:25:42,311 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:42] "GET /download/pdf_base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:25:46,130 - INFO - Downloading file: 3D_Visualization_base_part.stl.html
+2025-03-12 11:25:46,136 - INFO - 192.168.62.204 - - [12/Mar/2025 11:25:46] "GET /download/html_base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:35:19,330 - INFO -  * Restarting with stat
+2025-03-12 11:35:20,753 - WARNING -  * Debugger is active!
+2025-03-12 11:35:20,758 - INFO -  * Debugger PIN: 107-801-925
+2025-03-12 11:35:20,930 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-03-12 11:35:20,931 - INFO -  * Running on http://192.168.62.204:10000/ (Press CTRL+C to quit)
+2025-03-12 11:35:35,795 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:35] "GET / HTTP/1.1" 200 -
+2025-03-12 11:35:37,625 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:37] "GET / HTTP/1.1" 200 -
+2025-03-12 11:35:54,286 - INFO - Processing form submission
+2025-03-12 11:35:54,293 - INFO - Received file: base_part.stl, Material: ABS, Density: 1, Draft Angle: 2.0, Pull Direction: Y
+2025-03-12 11:35:54,293 - DEBUG - File size: 59084 bytes
+2025-03-12 11:35:54,296 - INFO - Starting background task task_base_part.stl_3877444591247390920 for file: base_part.stl
+2025-03-12 11:35:54,296 - INFO - Started background task task_base_part.stl_3877444591247390920
+2025-03-12 11:35:54,297 - INFO - Generating reports for base_part.stl
+2025-03-12 11:35:54,297 - INFO - Parsing file: base_part.stl
+2025-03-12 11:35:54,298 - INFO - Loading mesh with file type: stl
+2025-03-12 11:35:54,314 - DEBUG - face_normals didn't match triangles, ignoring!
+2025-03-12 11:35:54,326 - DEBUG - loaded <trimesh.Trimesh(vertices.shape=(590, 3), faces.shape=(1180, 3))> using load_stl
+2025-03-12 11:35:54,327 - DEBUG - load_mesh executed in 0.0277 seconds.
+2025-03-12 11:35:54,328 - INFO - Mesh loaded successfully. Vertices: 590, Faces: 1180
+2025-03-12 11:35:54,328 - INFO - Analyzing faces for draft angle compliance. Draft angle: 2.0°
+2025-03-12 11:35:54,330 - DEBUG - generating face normals
+2025-03-12 11:35:54,360 - INFO - Analysis complete. Compliant faces: 854, Non-compliant faces: 326
+2025-03-12 11:35:54,366 - INFO - Analysis metrics - Volume: 17637.72mm³, Mass: 17.64g, Compliance: 72.37%
+2025-03-12 11:35:54,367 - INFO - Generating 3D plot
+2025-03-12 11:35:54,369 - INFO - Total face count: 1180
+2025-03-12 11:35:54,447 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:54] "POST / HTTP/1.1" 200 -
+2025-03-12 11:35:54,524 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:54] "GET /check_status/task_base_part.stl_3877444591247390920 HTTP/1.1" 200 -
+2025-03-12 11:35:54,774 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:54] "GET / HTTP/1.1" 200 -
+2025-03-12 11:35:56,003 - INFO - Adding compliant faces to plot
+2025-03-12 11:35:56,040 - INFO - Adding non-compliant faces to plot
+2025-03-12 11:35:56,044 - INFO - Adding pull direction indicator: Y
+2025-03-12 11:35:56,267 - INFO - 3D plot generation complete
+2025-03-12 11:35:56,268 - INFO - Creating PDF report
+2025-03-12 11:35:56,284 - INFO - PDF report creation complete
+2025-03-12 11:35:57,028 - INFO - Report generation complete
+2025-03-12 11:35:57,029 - INFO - Task task_base_part.stl_3877444591247390920 completed successfully. PDF size: 2394 bytes, HTML size: 3681096 bytes
+2025-03-12 11:35:57,537 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:57] "GET /check_status/task_base_part.stl_3877444591247390920 HTTP/1.1" 200 -
+2025-03-12 11:35:57,584 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:57] "GET /results/task_base_part.stl_3877444591247390920/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:35:57,763 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:57] "GET /results/task_base_part.stl_3877444591247390920/base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:35:59,381 - INFO - Downloading file: DFM_Analysis_base_part.stl.pdf, Size: 2394 bytes
+2025-03-12 11:35:59,383 - INFO - 192.168.62.204 - - [12/Mar/2025 11:35:59] "GET /download/pdf_base_part.stl HTTP/1.1" 200 -
+2025-03-12 11:36:02,595 - INFO - Downloading file: 3D_Visualization_base_part.stl.html, Size: 3681096 bytes
+2025-03-12 11:36:02,599 - INFO - 192.168.62.204 - - [12/Mar/2025 11:36:02] "GET /download/html_base_part.stl HTTP/1.1" 200 -
