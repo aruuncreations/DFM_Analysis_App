@@ -185,5 +185,5 @@ def cleanup(session_id):
         return f"Error: {str(e)}", 500
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 10000))  # Use Render-assigned port or fallback to 10000
+    port = int(os.getenv("PORT", 10000))
     app.run(debug=True, host="0.0.0.0", port=port)
