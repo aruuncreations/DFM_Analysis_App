@@ -89,18 +89,17 @@ def index():
 
             logger.info(f"Received file: {file.filename}, Material: {material}, Density: {density}, Draft Angle: {draft_angle}, Pull Direction: {pull_direction}")
 
-            # Read file into memory and reset pointer
+            # Read file into memory completely
             file_content = file.read()
-            file.seek(0)  # Reset pointer after reading for future use
-
-            # Debugging: Log file size
-            logger.debug(f"File size: {len(file_content)} bytes")
+            
+            # Log file content type and size for debugging
+            logger.debug(f"File size: {len(file_content)} bytes, type: {type(file_content)}")
 
             filename = secure_filename(file.filename)
             MEMORY_STORAGE[f'input_{filename}'] = file_content
 
             # Generate unique task ID
-            task_id = f"task_{filename}_{hash(file_content)}"
+            task_id = f"task_{filename}_{hash(str(file_content))}"  # Make sure hash input is string
             MEMORY_STORAGE[f'task_status_{task_id}'] = 'processing'
 
             # Start processing in a background thread

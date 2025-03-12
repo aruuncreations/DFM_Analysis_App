@@ -39,23 +39,23 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
         raise ValueError(error_msg)
     
     try:
-        # Load the mesh from the file content in memory
-        with io.BytesIO(file_content) as file_stream:
-            logger.info(f"Loading mesh with file type: {file_type}")
+        # Create a new BytesIO object for each attempt to ensure position is at start
+        file_stream = io.BytesIO(file_content)
+        logger.info(f"Loading mesh with file type: {file_type}")
+        try:
+            # First try with explicit file_type
+            mesh = trimesh.load(file_stream, file_type=file_type)
+        except Exception as e:
+            logger.warning(f"Failed to load with explicit file_type: {str(e)}")
+            # Create a new BytesIO to ensure we start from the beginning
+            file_stream = io.BytesIO(file_content)
             try:
-                # First try with explicit file_type
-                mesh = trimesh.load(file_stream, file_type=file_type)
-            except Exception as e:
-                logger.warning(f"Failed to load with explicit file_type: {str(e)}")
-                # Reset stream position and try again without explicit file_type
-                file_stream.seek(0)
-                try:
-                    logger.info("Attempting to load without explicit file_type")
-                    mesh = trimesh.load(file_stream)
-                except Exception as e2:
-                    error_msg = f"Failed to load 3D model: {str(e2)}"
-                    logger.error(error_msg)
-                    raise ValueError(error_msg)
+                logger.info("Attempting to load without explicit file_type")
+                mesh = trimesh.load(file_stream)
+            except Exception as e2:
+                error_msg = f"Failed to load 3D model: {str(e2)}"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
     except Exception as e:
         error_msg = f"Error loading file: {str(e)}"
         logger.error(error_msg)
@@ -68,7 +68,7 @@ def parse_file_in_memory(file_content, filename, draft_angle, pull_direction):
         raise ValueError(error_msg)
     
     logger.info(f"Mesh loaded successfully. Vertices: {len(mesh.vertices)}, Faces: {len(mesh.faces)}")
-    
+
     # Get vertices and faces
     vertices = mesh.vertices
     faces = mesh.faces
