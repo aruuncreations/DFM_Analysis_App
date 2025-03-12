@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DFM Analysis Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .results-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #2C3E50;
+        }
+        .download-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #3498DB;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .download-link:hover {
+            background-color: #2980B9;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #95A5A6;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: #7F8C8D;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7F8C8D;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>DFM Analysis Results</h1>
+    
+    <div class="results-container">
+        <h2>Your analysis is complete!</h2>
+        <p>The following reports have been generated based on your model:</p>
+        
+        <div class="downloads">
+            <h3>Download Files:</h3>
+            <a class="download-link" href="{{ url_for('download', file_id=reports.input) }}">
+                Download Input Model
+            </a><br>
+            <a class="download-link" href="{{ url_for('download', file_id=reports.pdf) }}">
+                Download Analysis Report (PDF)
+            </a><br>
+            <a class="download-link" href="{{ url_for('download', file_id=reports.html) }}">
+                Download 3D Visualization (HTML)
+            </a>
+        </div>
+        
+        <p>The PDF report contains detailed analysis of your model's manufacturability, 
+           while the HTML visualization provides an interactive 3D view showing compliant 
+           and non-compliant surfaces.</p>
+    </div>
+    
+    <a class="back-button" href="{{ url_for('index') }}">Run Another Analysis</a>
+    
+    <footer>
+        Copyrights reserved - aruuncreations
+    </footer>
+</body>
+</html>

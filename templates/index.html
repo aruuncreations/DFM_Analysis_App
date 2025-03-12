@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DFM Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 200px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7F8C8D;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Design for Manufacturing Analysis</h1>
+    <p>Upload a 3D model file (.stp, .step, or .stl) to analyze for manufacturability.</p>
+    
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="material">Material:</label>
+            <input type="text" id="material" name="material" required placeholder="e.g., ABS, PLA, Aluminum">
+        </div>
+        
+        <div class="form-group">
+            <label for="density">Density (g/cm³):</label>
+            <input type="number" id="density" step="0.01" name="density" required placeholder="e.g., 1.04">
+        </div>
+        
+        <div class="form-group">
+            <label for="draft_angle">Draft Angle (°):</label>
+            <input type="number" id="draft_angle" step="0.1" name="draft_angle" required placeholder="e.g., 3.0">
+        </div>
+        
+        <div class="form-group">
+            <label for="pull_direction">Pull Direction:</label>
+            <select id="pull_direction" name="pull_direction" required>
+                <option value="X">X-Axis</option>
+                <option value="Y">Y-Axis</option>
+                <option value="Z">Z-Axis</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="file">3D Model File:</label>
+            <input type="file" id="file" name="file" required accept=".stp,.step,.stl">
+        </div>
+        
+        <button type="submit">Analyze Model</button>
+    </form>
+    
+    <footer>
+        Copyrights reserved - aruuncreations
+    </footer>
+</body>
+</html>

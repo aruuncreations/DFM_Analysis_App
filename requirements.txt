@@ -1,0 +1,7 @@
+flask==2.0.1
+werkzeug==2.0.1
+numpy==1.21.2
+trimesh==3.10.2
+plotly==5.3.1
+reportlab==3.6.1
+pillow==8.3.2
