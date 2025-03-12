@@ -4,4 +4,4 @@ numpy>=1.23.0
 trimesh==3.10.2
 plotly==5.3.1
 reportlab==4.1.0
-pillow==8.3.2
+pillow>=9.0.0
