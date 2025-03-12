@@ -220,5 +220,7 @@ def cleanup(session_id):
         logger.error(f"Error cleaning up session: {str(e)}", exc_info=True)
         return f"Error: {str(e)}", 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    import os
+    port = int(os.getenv("PORT", 5000))  # Use Render's assigned port or default to 5000
+    app.run(debug=True, host="0.0.0.0", port=port)
